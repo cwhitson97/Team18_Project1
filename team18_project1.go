@@ -15,6 +15,8 @@ type InstructionInfo struct {
 	VariablesUsed         []string
 }
 
+var R [32]int
+
 func main() {
 	printSim()
 	////Define PC for the instruction line
@@ -538,7 +540,12 @@ func printSim() {
 		result := identifyLegV8Instruction(instruction)
 
 		//originalInstruction := fmt.Sprintf("%.11s %.5s %.6s %.5s %.5s", instruction[0:11], instruction[11:16], instruction[16:22], instruction[22:27], instruction[27:32])
-		outputLine := fmt.Sprintf("%s\n %s\n\n %s\n %s\n %s\n %s\n %s\n\n %s\n\n\n", "====================", "cycle:"+strconv.Itoa(cycle)+"\t"+strconv.Itoa(pc)+"\t"+result.IdentifiedInstruction+"\t"+strings.Join(result.VariablesUsed, ""), "registers:", "r00:", "r08", "r16:", "r24:", "data:")
+		outputLine := fmt.Sprintf("%s\n %s\n\n %s\n %s\n %s\n %s\n %s\n\n %s\n\n\n", "====================", "cycle:"+strconv.Itoa(cycle)+"\t"+strconv.Itoa(pc)+"\t"+result.IdentifiedInstruction+"\t"+strings.Join(result.VariablesUsed, ""), "registers:",
+			"r00:\t"+strconv.Itoa(R[0])+"\t"+strconv.Itoa(R[1])+"\t"+strconv.Itoa(R[2])+"\t"+strconv.Itoa(R[3])+"\t"+strconv.Itoa(R[4])+"\t"+strconv.Itoa(R[5])+"\t"+strconv.Itoa(R[6])+"\t"+strconv.Itoa(R[7]),
+			"r08:\t"+strconv.Itoa(R[8])+"\t"+strconv.Itoa(R[9])+"\t"+strconv.Itoa(R[10])+"\t"+strconv.Itoa(R[11])+"\t"+strconv.Itoa(R[12])+"\t"+strconv.Itoa(R[13])+"\t"+strconv.Itoa(R[14])+"\t"+strconv.Itoa(R[15]),
+			"r16:\t"+strconv.Itoa(R[16])+"\t"+strconv.Itoa(R[17])+"\t"+strconv.Itoa(R[18])+"\t"+strconv.Itoa(R[19])+"\t"+strconv.Itoa(R[20])+"\t"+strconv.Itoa(R[21])+"\t"+strconv.Itoa(R[22])+"\t"+strconv.Itoa(R[23]),
+			"r24:\t"+strconv.Itoa(R[24])+"\t"+strconv.Itoa(R[25])+"\t"+strconv.Itoa(R[26])+"\t"+strconv.Itoa(R[27])+"\t"+strconv.Itoa(R[28])+"\t"+strconv.Itoa(R[29])+"\t"+strconv.Itoa(R[30])+"\t"+strconv.Itoa(R[31]),
+			"data:")
 
 		// Write the output line to the output file
 		_, err := writer.WriteString(outputLine)
