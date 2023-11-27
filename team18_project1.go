@@ -16,72 +16,73 @@ type InstructionInfo struct {
 }
 
 func main() {
-	//Define PC for the instruction line
-	var pc = 96
-
-	// Define command-line flags for input and output filenames
-	inputFilename := flag.String("i", "", "Input filename")
-	outputFilename := flag.String("o", "", "Output filename")
-	flag.Parse()
-
-	if *inputFilename == "" || *outputFilename == "" {
-		fmt.Println("Usage: go run team#_project1.go -i input_filename -o output_filename")
-		return
-	}
-
-	inputFile, err := os.Open(*inputFilename)
-	if err != nil {
-		fmt.Println("Error opening input file:", err)
-		return
-	}
-	defer func(inputFile *os.File) {
-		err := inputFile.Close()
-		if err != nil {
-
-		}
-	}(inputFile)
-
-	outputFile, err := os.Create(*outputFilename)
-	if err != nil {
-		fmt.Println("Error creating output file:", err)
-		return
-	}
-	defer func(outputFile *os.File) {
-		err := outputFile.Close()
-		if err != nil {
-
-		}
-	}(outputFile)
-
-	scanner := bufio.NewScanner(inputFile)
-	writer := bufio.NewWriter(outputFile)
-
-	for scanner.Scan() {
-
-		instruction := scanner.Text()
-		result := identifyLegV8Instruction(instruction)
-
-		//originalInstruction := fmt.Sprintf("%.11s %.5s %.6s %.5s %.5s", instruction[0:11], instruction[11:16], instruction[16:22], instruction[22:27], instruction[27:32])
-		outputLine := fmt.Sprintf("%s\t  %v\t  %s\t  %v\n", result.OriginalInstruction, pc,
-			result.IdentifiedInstruction, strings.Join(result.VariablesUsed, ""))
-
-		// Write the output line to the output file
-		_, err := writer.WriteString(outputLine)
-		if err != nil {
-			fmt.Println("Error writing to output file:", err)
-			break
-		}
-		pc = pc + 4
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading input file:", err)
-	}
-
-	// Flush and close the output file
-	err = writer.Flush()
-	if err != nil {
-		return
-	}
+	printSim()
+	////Define PC for the instruction line
+	//var pc = 96
+	//
+	//// Define command-line flags for input and output filenames
+	//inputFilename := flag.String("i", "", "Input filename")
+	//outputFilename := flag.String("o", "", "Output filename")
+	//flag.Parse()
+	//
+	//if *inputFilename == "" || *outputFilename == "" {
+	//	fmt.Println("Usage: go run team#_project1.go -i input_filename -o output_filename")
+	//	return
+	//}
+	//
+	//inputFile, err := os.Open(*inputFilename)
+	//if err != nil {
+	//	fmt.Println("Error opening input file:", err)
+	//	return
+	//}
+	//defer func(inputFile *os.File) {
+	//	err := inputFile.Close()
+	//	if err != nil {
+	//
+	//	}
+	//}(inputFile)
+	//
+	//outputFile, err := os.Create(*outputFilename)
+	//if err != nil {
+	//	fmt.Println("Error creating output file:", err)
+	//	return
+	//}
+	//defer func(outputFile *os.File) {
+	//	err := outputFile.Close()
+	//	if err != nil {
+	//
+	//	}
+	//}(outputFile)
+	//
+	//scanner := bufio.NewScanner(inputFile)
+	//writer := bufio.NewWriter(outputFile)
+	//
+	//for scanner.Scan() {
+	//
+	//	instruction := scanner.Text()
+	//	result := identifyLegV8Instruction(instruction)
+	//
+	//	//originalInstruction := fmt.Sprintf("%.11s %.5s %.6s %.5s %.5s", instruction[0:11], instruction[11:16], instruction[16:22], instruction[22:27], instruction[27:32])
+	//	outputLine := fmt.Sprintf("%s\t  %v\t  %s\t  %v\n", result.OriginalInstruction, pc,
+	//		result.IdentifiedInstruction, strings.Join(result.VariablesUsed, ""))
+	//
+	//	// Write the output line to the output file
+	//	_, err := writer.WriteString(outputLine)
+	//	if err != nil {
+	//		fmt.Println("Error writing to output file:", err)
+	//		break
+	//	}
+	//	pc = pc + 4
+	//}
+	//if err := scanner.Err(); err != nil {
+	//	fmt.Println("Error reading input file:", err)
+	//}
+	//
+	//// Flush and close the output file
+	//err = writer.Flush()
+	//if err != nil {
+	//	return
+	//}
 }
 
 func identifyLegV8Instruction(instruction string) InstructionInfo {
@@ -488,3 +489,76 @@ func identifyLegV8Instruction(instruction string) InstructionInfo {
 	}
 
 }
+
+func printSim() {
+	//Define PC for the instruction line
+	var pc = 96
+	var cycle = 1
+
+	// Define command-line flags for input and output filenames
+	inputFilename := flag.String("i", "", "Input filename")
+	outputFilename := flag.String("o", "", "Output filename")
+	flag.Parse()
+
+	if *inputFilename == "" || *outputFilename == "" {
+		fmt.Println("Usage: go run team#_project1.go -i input_filename -o output_filename")
+		return
+	}
+
+	inputFile, err := os.Open(*inputFilename)
+	if err != nil {
+		fmt.Println("Error opening input file:", err)
+		return
+	}
+	defer func(inputFile *os.File) {
+		err := inputFile.Close()
+		if err != nil {
+
+		}
+	}(inputFile)
+
+	outputFile, err := os.Create(*outputFilename)
+	if err != nil {
+		fmt.Println("Error creating output file:", err)
+		return
+	}
+	defer func(outputFile *os.File) {
+		err := outputFile.Close()
+		if err != nil {
+
+		}
+	}(outputFile)
+
+	scanner := bufio.NewScanner(inputFile)
+	writer := bufio.NewWriter(outputFile)
+
+	for scanner.Scan() {
+
+		instruction := scanner.Text()
+		result := identifyLegV8Instruction(instruction)
+
+		//originalInstruction := fmt.Sprintf("%.11s %.5s %.6s %.5s %.5s", instruction[0:11], instruction[11:16], instruction[16:22], instruction[22:27], instruction[27:32])
+		outputLine := fmt.Sprintf("%s\n %s\n\n %s\n %s\n %s\n %s\n %s\n\n %s\n\n\n", "====================", "cycle:"+strconv.Itoa(cycle)+"\t"+strconv.Itoa(pc)+"\t"+result.IdentifiedInstruction+"\t"+strings.Join(result.VariablesUsed, ""), "registers:", "r00:", "r08", "r16:", "r24:", "data:")
+
+		// Write the output line to the output file
+		_, err := writer.WriteString(outputLine)
+		if err != nil {
+			fmt.Println("Error writing to output file:", err)
+			break
+		}
+		pc = pc + 4
+		cycle = cycle + 1
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading input file:", err)
+	}
+
+	// Flush and close the output file
+	err = writer.Flush()
+	if err != nil {
+		return
+	}
+}
+
+//func instructionSim(instruction string) InstructionInfo {
+//}
